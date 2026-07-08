@@ -30,17 +30,23 @@ meta_harness/
 │   │   └─ _TEMPLATE.md       ← 서브에이전트 정의 템플릿
 │   └─ skills/
 │       ├─ _TEMPLATE/SKILL.md ← 스킬 작성 템플릿
-│       └─ verify/SKILL.md    ← 범용 커밋 전 검증 스킬
+│       ├─ verify/SKILL.md    ← 범용 커밋 전 검증 스킬
+│       ├─ debug/SKILL.md     ← 체계적 디버깅 (재현→가설→최소수정→회귀)
+│       └─ tdd/SKILL.md       ← 테스트 우선 규율 (RED→GREEN→REFACTOR)
 ├─ docs/
+│   ├─ plan-template.md                 ← 작업 계획서 (스펙→작업분해→DoD — 코드 전에 계획 먼저)
+│   ├─ master-plan-template.md          ← 다단계 마스터플랜 (Phase 순서 강제·상태판)
 │   ├─ agent-brief-template.md          ← ★ 위임 브리프 8요소 (병렬 안전의 핵심)
 │   ├─ verification-loop.md             ← 검증 루프 설계 템플릿
+│   ├─ automation-gates.md              ← hooks·CI 게이트 예시 (규칙의 자동화 승격)
 │   ├─ rationalization-guardrails.md    ← 합리화 방지표 (실패 기록 축적 장치)
 │   └─ decisions-log-template.md        ← 불변 결정 로그 (세션 간 결정 뒤집힘 방지)
 └─ packs/                     ← ★ 선택 모듈 (필요한 것만 프로젝트에 복사)
     ├─ README.md              ← 팩 카탈로그 + 설치/제거법
     ├─ content-verification/  ← 콘텐츠 저작 → 적대 검증 → 육안 확인 파이프라인
     ├─ db-analytics/          ← 레지스트리 패턴 · 운영/분석 DB 분리 · 이벤트 화이트리스트
-    └─ security-privacy/      ← STRIDE · ASVS L2 · RBAC/ABAC · RLS · 동의 게이트 · 인시던트 러닝북
+    ├─ security-privacy/      ← STRIDE · ASVS L2 · RBAC/ABAC · RLS · 동의 게이트 · 인시던트 러닝북
+    └─ code-collab/           ← git worktree 병렬 실험 · 코드리뷰 프로토콜
 ```
 
 ## 5분 퀵스타트
@@ -69,6 +75,7 @@ meta_harness/
 | 4 | **불변식은 테스트로 강제** | 문서의 규칙은 잊히지만 CI가 막는 규칙은 잊혀도 안전하다. 규칙→테스트 전환을 상시 추진. |
 | 5 | **작업 단위 = 완성 세트** | "생성기만 만들고 해설은 나중에" 같은 반쪽 커밋 금지. 세트 구성물을 정의하고 전부 갖춰야 커밋. |
 | 6 | **합리화 방지표** | 실패할 때마다 "그때 든 유혹 → 실제 벌어진 일 → 규율"을 표에 축적. 하네스는 실패를 먹고 자란다. |
+| 7 | **계획 먼저** | 규모 있는 작업은 코드 전에 계획서(스펙→분해→DoD) → 승인 → 실행. 다단계는 마스터플랜(Phase 순서·상태판)으로 승격. |
 
 ## 참고 자료
 
