@@ -50,7 +50,8 @@ meta_harness/
     ├─ content-verification/  ← 콘텐츠 저작 → 적대 검증 → 육안 확인 파이프라인
     ├─ db-analytics/          ← 레지스트리 패턴 · 운영/분석 DB 분리 · 이벤트 화이트리스트
     ├─ security-privacy/      ← STRIDE · ASVS L2 · RBAC/ABAC · RLS · 동의 게이트 · 인시던트 러닝북
-    └─ code-collab/           ← git worktree 병렬 실험 · 코드리뷰 프로토콜
+    ├─ code-collab/           ← git worktree 병렬 실험 · 코드리뷰 프로토콜
+    └─ e2e-deploy/            ← Playwright E2E(설치→작동) · AI 브라우저 검증 · 배포 검증 루프(폴링·롤백 실험)
 ```
 
 ## 퀵스타트 (골격 배치 5분 / 기입은 프로젝트 규모에 따라 30분~)

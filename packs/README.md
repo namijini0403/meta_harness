@@ -16,14 +16,16 @@
 | **db-analytics** | DB에 사용자 데이터를 저장하거나 학습분석·이벤트 수집을 하는 프로젝트 | 레지스트리 패턴 DDL 템플릿(app/event_type 버전관리) · 운영/분석 DB 분리 원칙 · 이벤트 화이트리스트 3곳 동기화 규약 · 자유텍스트 마스킹·no-op 법적 안전장치 |
 | **security-privacy** | 개인정보·아동·학교·의료 등 민감 도메인, 또는 외부 공개 서비스 | 보안 문서 스위트 목차(STRIDE·ASVS L2·RBAC/ABAC·데이터분류·보존/파기·인시던트 러닝북) · 보안 감사 에이전트 정의 · RLS 정책 템플릿 · 동의 게이트 설계 · Anthropic Cybersecurity Skills 연동 가이드 |
 | **code-collab** | 같은 파일의 병렬 실험(A안/B안 경쟁)이나 코드리뷰 흐름이 필요한 프로젝트 | git worktree 병렬 절차(격리·수확·정리) · 코드리뷰 프로토콜(요청/수행/수신 — 리뷰어 독립성·방어 금지 규율) |
+| **e2e-deploy** | 브라우저 앱(웹/PWA)이 있거나 자동 배포를 쓰는 프로젝트 | Playwright 설치→작동 절차 · 스모크 스위트 골격(콘솔 에러 0 포함) · 브라우저 검증 2모드 규약(자동 E2E vs AI 조작 육안) · **실행 가능한 배포 폴링 스크립트**(버전 마커로 구버전 오검증 방지) · 배포 검증 루프·롤백 실험·CI 잡 |
 
 ## 팩 조합 가이드
 
-- 학습앱·연구 플랫폼 (DRACONIS류): content-verification + db-analytics + security-privacy.
+- 학습앱·연구 플랫폼 (DRACONIS류): content-verification + db-analytics + security-privacy + e2e-deploy.
 - 사내 도구·CLI: content-verification만 (산출물 검증 규율).
-- 공개 SaaS: db-analytics + security-privacy (+팀 개발이면 code-collab).
+- 공개 SaaS: db-analytics + security-privacy + e2e-deploy (+팀 개발이면 code-collab).
 - 정적 사이트·문서 프로젝트: 팩 없이 코어만.
 - code-collab은 어느 조합에든 추가 가능 — 기본 병렬(소유 경계)로 부족할 때만.
+- e2e-deploy는 브라우저 UI 또는 자동 배포 중 하나라도 있으면 권장 — 둘 다 없으면(순수 라이브러리) 불필요.
 
 ## 새 팩 만들기
 
