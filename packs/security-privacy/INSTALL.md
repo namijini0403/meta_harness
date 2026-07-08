@@ -10,7 +10,8 @@
 2. `agents/security-auditor.md` → 프로젝트 `.claude/agents/` 로 복사, 프로젝트 경로 채우기. agents/README.md 경계표에 "docs/security/** 소유, 코드는 감사만" 행 추가.
 3. `rls-policy-template.sql` → 프로젝트 `server/sql/` 또는 `docs/security/` 로 복사.
 4. `consent-gate-design.md` → 수집 기능이 있으면 `docs/security/` 로 복사 (db-analytics 팩과 병용 권장).
-5. CLAUDE.md §0에 인시던트 필독 경로 한 줄 추가:
+5. `incident-runbook-template.md` → 프로젝트 `docs/security/INCIDENT_RESPONSE_RUNBOOK.md` 로 복사, 서비스별 절 채우기.
+6. CLAUDE.md §0에 인시던트 필독 경로 한 줄 추가:
    `⚠️ 장애·침해 의심 시 필독: docs/security/INCIDENT_RESPONSE_RUNBOOK.md (증상→절 매핑 표부터)`
 
 ## 제거
@@ -25,4 +26,5 @@
 | `agents/security-auditor.md` | 감사 전용 에이전트 정의 (수문장 패턴 — 지적하되 수정은 오너에게) |
 | `rls-policy-template.sql` | RLS 기본 거부 + 역할별 정책 골격 |
 | `consent-gate-design.md` | 동의 전 수집 차단(no-op) 설계 |
+| `incident-runbook-template.md` | 인시던트 러닝북 골격 — 증상→절 매핑 표 패턴 |
 | `cybersecurity-skills-integration.md` | Anthropic Cybersecurity Skills(mukul975) 연동 — 어떤 스킬을 언제 부르나 |

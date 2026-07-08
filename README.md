@@ -26,13 +26,16 @@ meta_harness/
 ├─ .claude/
 │   ├─ settings.json          ← 권한 스켈레톤
 │   ├─ agents/
-│   │   ├─ README.md          ← 에이전트 팀 협응 규칙 (소유 경계·순차 파일·핸드오프)
-│   │   └─ _TEMPLATE.md       ← 서브에이전트 정의 템플릿
+│   │   └─ README.md          ← 에이전트 팀 협응 규칙 (소유 경계·순차 파일·핸드오프)
 │   └─ skills/
-│       ├─ _TEMPLATE/SKILL.md ← 스킬 작성 템플릿
+│       ├─ init-harness/SKILL.md ← ★ 첫 세션용: 조사·문답으로 하네스 조립 (일회용, 완료 후 삭제)
 │       ├─ verify/SKILL.md    ← 범용 커밋 전 검증 스킬
 │       ├─ debug/SKILL.md     ← 체계적 디버깅 (재현→가설→최소수정→회귀)
 │       └─ tdd/SKILL.md       ← 테스트 우선 규율 (RED→GREEN→REFACTOR)
+├─ examples/
+│   └─ EXAMPLE-CLAUDE.md      ← 채움 예시 (가상 프로젝트로 본 완성형 CLAUDE.md)
+├─ scripts/
+│   └─ check-placeholders.mjs ← 설치 자가검증: 미기입 {{...}} 잔존 검사 (CI 편입 가능)
 ├─ docs/
 │   ├─ plan-template.md                 ← 작업 계획서 (스펙→작업분해→DoD — 코드 전에 계획 먼저)
 │   ├─ master-plan-template.md          ← 다단계 마스터플랜 (Phase 순서 강제·상태판)
@@ -40,7 +43,8 @@ meta_harness/
 │   ├─ verification-loop.md             ← 검증 루프 설계 템플릿
 │   ├─ automation-gates.md              ← hooks·CI 게이트 예시 (규칙의 자동화 승격)
 │   ├─ rationalization-guardrails.md    ← 합리화 방지표 (실패 기록 축적 장치)
-│   └─ decisions-log-template.md        ← 불변 결정 로그 (세션 간 결정 뒤집힘 방지)
+│   ├─ decisions-log-template.md        ← 불변 결정 로그 (세션 간 결정 뒤집힘 방지)
+│   └─ templates/                       ← 에이전트·스킬 정의 템플릿 (복사해 쓰는 원본 — .claude/ 밖에 두는 이유: 플레이스홀더 상태로 활성 디렉터리에 있으면 무효 정의로 로드될 수 있음)
 └─ packs/                     ← ★ 선택 모듈 (필요한 것만 프로젝트에 복사)
     ├─ README.md              ← 팩 카탈로그 + 설치/제거법
     ├─ content-verification/  ← 콘텐츠 저작 → 적대 검증 → 육안 확인 파이프라인
@@ -49,21 +53,27 @@ meta_harness/
     └─ code-collab/           ← git worktree 병렬 실험 · 코드리뷰 프로토콜
 ```
 
-## 5분 퀵스타트
+## 퀵스타트 (골격 배치 5분 / 기입은 프로젝트 규모에 따라 30분~)
 
-1. **복사**: 이 저장소를 통째로 새 프로젝트 루트에 복사 (또는 clone 후 `.git` 삭제).
-   ```
-   git clone https://github.com/namijini0403/meta_harness my-project-harness
-   ```
-2. **코어 채우기**: `CLAUDE.md`를 열어 `{{...}}` 플레이스홀더를 프로젝트 사실로 채운다.
-   (프로젝트 한 줄 정의 → 검증 명령 → 불변식 → 커밋 규약. 30분이면 충분.)
-3. **팩 선택**: `packs/README.md`를 보고 필요한 팩만 남긴다.
-   - 콘텐츠(문항·문서·데이터)를 대량 생산? → `content-verification` 유지
-   - DB에 사용자 데이터 저장? → `db-analytics` 유지
-   - 개인정보·아동·학교·의료 등 민감 도메인? → `security-privacy` 유지
-   - 안 쓰는 팩은 폴더째 삭제. 나중에 필요하면 이 repo에서 다시 복사.
-4. **에이전트 경계 정의**: `.claude/agents/README.md`의 소유 경계표를 프로젝트 파일 구조에 맞게 채운다.
-5. **첫 세션에서 AI에게**: "CLAUDE.md를 읽고 규약대로 작업해" — 끝.
+1. **복사**:
+   - **새 프로젝트**: clone 후 `.git` 삭제 → 그대로 프로젝트 루트로 사용.
+     ```
+     git clone https://github.com/namijini0403/meta_harness my-project && cd my-project && rm -rf .git
+     ```
+   - **기존 프로젝트에 도입(레트로핏)**: `.claude/`·`docs/`·`packs/`·`CLAUDE.md`만 복사. **기존 README·CLAUDE.md를 덮어쓰지 말 것** — 기존 CLAUDE.md가 있으면 킷의 절 구조와 대조해 빠진 절만 병합.
+2. **AI에게 설치를 맡긴다**: 첫 세션에서 **"하네스 설치해"** — `init-harness` 스킬이 프로젝트를 조사하고, 문답으로 플레이스홀더를 채우고, 안 쓰는 팩을 정리하고, 검증 명령이 실제 도는지 확인한 뒤 스스로를 삭제한다.
+   (수동으로 하려면: `CLAUDE.md`의 `{{...}}`를 채우고 — 채움 예시는 `examples/EXAMPLE-CLAUDE.md` — 필요한 팩만 남긴다. ⚠️ **남긴 팩은 각 팩의 `INSTALL.md` 절차(스킬을 `.claude/skills/`로 복사·문서 이동·CLAUDE.md 절 기입)까지 실행해야 활성화된다** — 폴더만 남기면 죽은 폴더다. 그리고 `.claude/agents/README.md` 경계표를 채우고, `docs/decisions-log-template.md`를 `docs/decisions-log.md`로 복사한다.)
+3. **설치 자가검증**: `node scripts/check-placeholders.mjs` → 잔존 0건 확인, CLAUDE.md §3의 검증 명령을 실제 1회 실행해 전부 도는지 확인. (init-harness 스킬을 썼다면 자동 수행됨.)
+4. **설치 후 정리**: 킷의 README.md는 프로젝트 소개로 교체, `LICENSE`는 삭제하거나 자기 프로젝트 라이선스로 교체, HARNESS.md는 `docs/`로 이동하거나 삭제(원본은 이 repo), 안 쓰는 팩 폴더 삭제.
+5. **이후 세션에서 AI에게**: "CLAUDE.md를 읽고 규약대로 작업해" — 끝.
+
+## 다른 AI 도구에서 쓰기 (이식성의 실제 범위)
+
+- **모델 독립**: CLAUDE.md·docs/·packs/의 규약은 순수 마크다운 — 어떤 모델/도구든 읽고 따를 수 있다.
+- **도구 종속**: `.claude/`(agents·skills·settings)는 Claude Code 전용 구조다. 다른 도구에서는 —
+  - CLAUDE.md → `AGENTS.md` 등 그 도구의 규약 파일로 이름만 바꿔 사용.
+  - `.claude/skills/*/SKILL.md` → 내용은 일반 절차서다. 그 도구의 프롬프트/명령 체계로 옮기거나 docs/로 이동해 "○○ 작업 시 이 문서를 따르라"로 CLAUDE.md(AGENTS.md)에서 참조.
+  - `.claude/agents/README.md`의 경계표·브리프 8요소는 도구 무관 — 어떤 멀티에이전트 체계에서든 그대로 유효.
 
 ## 핵심 설계 원칙 (요약 — 원리는 HARNESS.md)
 

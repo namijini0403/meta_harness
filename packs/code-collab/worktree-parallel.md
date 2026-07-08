@@ -21,7 +21,8 @@ git merge wt/{{작업명}}          # 또는 cherry-pick·수동 이식
 
 # 4. 정리 (필수 — 잊으면 유령 브랜치·디스크 누수)
 git worktree remove ../{{프로젝트}}-wt-{{작업명}}
-git branch -d wt/{{작업명}}
+git branch -d wt/{{작업명}}     # 병합된 브랜치
+# 경쟁 구현의 패자 브랜치는 미병합이라 -d가 거부됨 → 내용 폐기 의사를 확인한 뒤 -D
 git worktree prune
 ```
 

@@ -6,9 +6,10 @@
 
 ## 설치
 
-1. `db-design-principles.md` → 프로젝트 `docs/db/` 로 복사, 프로젝트 사실 채우기.
-2. `analytics-schema-template.sql` → 프로젝트 `server/sql/` 로 복사, 도메인 테이블 추가.
-3. `event-whitelist-protocol.md` → 프로젝트 `docs/db/` 로 복사, 동기화 3곳의 실제 경로 기입.
+1. `db-design-principles.md` → 프로젝트 문서 폴더({{예: docs/db/}})로 복사, 프로젝트 사실 채우기.
+2. `analytics-schema-template.sql` → SQL 폴더({{예: server/sql/}})로 복사, 도메인 테이블 추가.
+   ⚠️ 이 DDL은 전 테이블 RLS를 켠다 — **service_role이 아닌 수집 롤을 쓴다면 INSERT 정책 없이는 모든 수집이 거부된다.** SQL 말미의 주석 처리된 정책 골격을 해제해 롤을 지정할 것.
+3. `event-whitelist-protocol.md` → 문서 폴더로 복사, 동기화 3곳의 실제 경로 기입.
 4. CLAUDE.md에 §6(데이터·개인정보 불변 결정) 절 활성화 — 코어 템플릿에 이미 초안 있음, 플레이스홀더만 채우기.
 
 ## 제거

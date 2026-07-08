@@ -32,8 +32,7 @@ CREATE POLICY "{{events}}_insert_service" ON {{schema}}.{{events}}
     WITH CHECK (true);
 
 -- 5. 검증 쿼리 — 감사 시 실행: RLS 꺼진 테이블 적발 (0행이 정상)
--- SELECT schemaname, tablename FROM pg_tables
--- WHERE schemaname = '{{schema}}'
---   AND tablename NOT IN (SELECT tablename FROM pg_tables t
---                         JOIN pg_class c ON c.relname = t.tablename
---                         WHERE c.relrowsecurity);
+--    (pg_namespace로 스키마까지 조인 — relname만으로 조인하면 타 스키마 동명 테이블 때문에 거짓 통과)
+-- SELECT n.nspname AS schema, c.relname AS "table"
+-- FROM pg_class c JOIN pg_namespace n ON n.oid = c.relnamespace
+-- WHERE n.nspname = '{{schema}}' AND c.relkind = 'r' AND NOT c.relrowsecurity;

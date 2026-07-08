@@ -67,5 +67,9 @@ ALTER TABLE analytics.app_registry        ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics.event_type_registry ENABLE ROW LEVEL SECURITY;
 ALTER TABLE analytics.events              ENABLE ROW LEVEL SECURITY;
 -- 쓰기: 서비스/수집 롤만 / 읽기: 분석용 읽기전용 롤·뷰만.
--- 정책 골격 = packs/security-privacy/rls-policy-template.sql (INSERT 정책은 반드시 TO로 롤 스코프,
--- UPDATE는 USING+WITH CHECK 쌍). 상세는 프로젝트 보안 설계에서.
+-- ⚠️ RLS만 켜고 정책이 없으면 기본 거부 = service_role 외 모든 롤의 수집이 막힌다.
+--    별도 수집 롤을 쓰면 아래 골격의 주석을 해제하고 롤명을 지정하라 (이 팩 단독으로 완결):
+-- CREATE POLICY events_insert_ingest ON analytics.events
+--     FOR INSERT TO {{ingest_role}}       -- 수집 전용 롤만 — anon/authenticated에 열지 말 것
+--     WITH CHECK (true);
+-- 확장 정책 골격(UPDATE의 USING+WITH CHECK 쌍 등) = packs/security-privacy/rls-policy-template.sql.

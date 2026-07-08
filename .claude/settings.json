@@ -1,5 +1,5 @@
 {
-  "_readme": "permissions.allow에 프로젝트에서 자주 쓰는 읽기전용·검증 명령을 등록해 권한 프롬프트를 줄인다. 예: 'PowerShell(npx tsc --noEmit -p client)', 'Bash(npx vitest run:*)'",
+  "_readme": "permissions.allow에 자주 쓰는 읽기전용·검증 명령을 등록해 권한 프롬프트를 줄인다. 접두 매칭은 ':*' — 예: 'Bash(npx tsc:*)', 'Bash(npx vitest run:*)', 'PowerShell(npm run build:*)'. 프로젝트에서 실제 쓰는 형태로 채울 것.",
   "permissions": {
     "allow": []
   }

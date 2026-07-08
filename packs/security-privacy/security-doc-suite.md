@@ -34,7 +34,7 @@
 
 | 문서 | 내용 |
 |---|---|
-| `INCIDENT_RESPONSE_RUNBOOK.md` | 침해·장애 대응 절차. **말미에 "증상 → 절 매핑 표"** — 사고 중엔 목차 읽을 시간이 없다 |
+| `INCIDENT_RESPONSE_RUNBOOK.md` | 침해·장애 대응 절차. **말미에 "증상 → 절 매핑 표"** — 사고 중엔 목차 읽을 시간이 없다. 골격 = 이 팩의 `incident-runbook-template.md` |
 | `AUDIT_LOG_SCHEMA.sql` | 감사 로그(누가 언제 무엇을) 스키마 |
 | `ENVIRONMENT_SEPARATION.md` | dev/prod 분리 · 시크릿 관리(환경변수만, 코드·문서에 값 비노출) |
 | `SECURITY_DESIGN_METHODOLOGY.md` | 이 스위트를 어떻게 유지하는가 (변경 시 갱신 의무) |

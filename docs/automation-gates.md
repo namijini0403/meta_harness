@@ -5,18 +5,20 @@
 
 ## 1. Claude Code hooks (.claude/settings.json)
 
-자주 쓰는 패턴 3가지 — 프로젝트에 맞게 명령만 교체해 settings.json에 추가:
+자주 쓰는 패턴 3가지 — 프로젝트에 맞게 명령만 교체해 settings.json에 추가.
+⚠️ **아래는 설명용 jsonc(주석 포함)다 — 실제 settings.json은 주석을 허용하지 않으므로 `//` 줄을 전부 제거하고 붙여넣어라.**
 
 ```jsonc
 {
   "hooks": {
-    // ① 커밋 금지 파일 보호: 저작권 원본·시크릿 폴더를 AI가 git add 하면 차단
+    // ① 커밋 금지 파일 보호: 스테이징에 금지 경로가 들어오면 비영(非零) 종료로 차단
+    //    (별도 스크립트 불필요 — 인라인 한 줄. {{금지패턴}}만 교체: 예 ^(참고문제|유형소스)/)
     "PreToolUse": [
       {
         "matcher": "Bash",
         "hooks": [{
           "type": "command",
-          "command": "node .claude/hooks/block-forbidden-add.mjs"
+          "command": "git diff --cached --name-only | grep -E '{{금지패턴}}' && echo '커밋 금지 파일이 스테이징됨' && exit 2 || exit 0"
         }]
       }
     ],
@@ -70,8 +72,10 @@ jobs:
         run: {{npm run build}}
 
       # 보안 게이트 (packs/security-privacy 병용 시)
+      # ⚠️ gitleaks는 GITHUB_TOKEN env 필수 + 이력 전체 스캔엔 checkout에 fetch-depth: 0 필요 (조직 계정은 라이선스 키 별도)
       - name: 비밀 스캔
         uses: gitleaks/gitleaks-action@v2
+        env: { GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}" }
       - name: 커밋 금지 파일 침입 검사
         run: "! git ls-files | grep -E '{{예: ^(참고문제|유형소스)/}}'"
       - name: RLS 정책 존재 검사   # 새 테이블에 ENABLE ROW LEVEL SECURITY 누락 적발
