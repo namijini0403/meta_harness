@@ -62,5 +62,10 @@ CREATE INDEX IF NOT EXISTS idx_events_uid_time  ON analytics.events (pseudo_uid,
 -- ---------------------------------------------------------------------------
 -- 5. RLS 기본 거부 (packs/security-privacy 병용 시 그쪽 정책 템플릿 우선)
 -- ---------------------------------------------------------------------------
-ALTER TABLE analytics.events ENABLE ROW LEVEL SECURITY;
--- 쓰기: 서비스 롤만 / 읽기: 분석용 읽기전용 롤·뷰만. 정책 상세는 프로젝트 보안 설계에서.
+-- 원칙: "모든 테이블 RLS 활성화, 예외 없음" — 레지스트리도 포함 (정책 없는 테이블 = 기본 거부가 정상)
+ALTER TABLE analytics.app_registry        ENABLE ROW LEVEL SECURITY;
+ALTER TABLE analytics.event_type_registry ENABLE ROW LEVEL SECURITY;
+ALTER TABLE analytics.events              ENABLE ROW LEVEL SECURITY;
+-- 쓰기: 서비스/수집 롤만 / 읽기: 분석용 읽기전용 롤·뷰만.
+-- 정책 골격 = packs/security-privacy/rls-policy-template.sql (INSERT 정책은 반드시 TO로 롤 스코프,
+-- UPDATE는 USING+WITH CHECK 쌍). 상세는 프로젝트 보안 설계에서.
