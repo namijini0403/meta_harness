@@ -7,7 +7,7 @@
 ## 설치
 
 1. `security-doc-suite.md` → 프로젝트 `docs/security/README.md` 로 복사 — 이 목차대로 문서를 채워가는 것이 곧 보안 설계 프로세스다.
-2. `agents/security-auditor.md` → 프로젝트 `.claude/agents/` 로 복사, 프로젝트 경로 채우기. agents/README.md 경계표에 "docs/security/** 소유, 코드는 감사만" 행 추가.
+2. `agents/security-auditor.md` → 프로젝트 `.claude/agents/` 로 복사, 프로젝트 경로 채우기. (orchestration 팩 사용 시 경계표에 "docs/security/** 소유, 코드는 감사만" 행 추가.)
 3. `rls-policy-template.sql` → 프로젝트 `server/sql/` 또는 `docs/security/` 로 복사.
 4. `consent-gate-design.md` → 수집 기능이 있으면 `docs/security/` 로 복사 (db-analytics 팩과 병용 권장).
 5. `incident-runbook-template.md` → 프로젝트 `docs/security/INCIDENT_RESPONSE_RUNBOOK.md` 로 복사, 서비스별 절 채우기.

@@ -3,7 +3,7 @@
 // 사용: node scripts/check-placeholders.mjs [대상...]   (기본: CLAUDE.md .claude)
 // 종료코드: 잔존 0건=0, 있으면 1 (CI 게이트로도 사용 가능)
 //
-// 주의: docs/의 *-template.md·agent-brief-template 등은 "복사해 쓰는 영구 템플릿"이라
+// 주의: docs/의 *-template.md·packs/orchestration의 템플릿 등은 "복사해 쓰는 영구 템플릿"이라
 // {{}}가 남는 게 정상 — 기본 대상에서 제외한다. 검사 대상은 "채워진 상태여야 하는 파일"
 // (CLAUDE.md, .claude/ 의 실 에이전트·스킬 정의, 팩 설치로 docs/에 복사·기입된 문서)뿐.
 import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
