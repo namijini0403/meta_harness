@@ -1,0 +1,49 @@
+meta_harness — 서드파티 편입 기록 (THIRD-PARTY NOTICE)
+=============================================================
+
+코어 스킬 `.claude/skills/{ready,go,migration}/`는 외부 프로젝트 **Dryforge**를
+원문 그대로(vendored verbatim) 편입한 것이다. meta_harness 자체 저작물이 아니다.
+(v2.1부터 선택 팩이 아니라 코어 상시 포함 스킬로 승격 — `disable-model-invocation`
+이라 자동 발동은 않고, 큰 빌드에서 모델이 권할 때만 쓰인다. 결합 규약 = `docs/dryforge-bridge.md`.)
+
+편입 대상
+---------
+- 프로젝트: Dryforge — "Bounded-autonomy plugin harness for agents."
+- 저작자: prekuter <prekuter@dryforge.dev>
+- 출처: https://github.com/prekuter/dryforge
+- 라이선스: Apache License 2.0 (전문: repo 루트의 LICENSE-APACHE-2.0)
+- 고정 버전(기준 커밋): v1.3.7 / 904f25742c9e5a36b09753a7f5ea8c26801b0fa9 (2026-09-27)
+- 편입 경로: 저장소의 `claude/skills/` (Claude Code 빌드 — 소스 `src/skills/`에
+  `disable-model-invocation: true` + `allowed-tools` 두 줄만 추가된 것. references는
+  소스와 바이트 동일).
+
+편입 범위
+---------
+- 편입함: Dryforge `claude/skills/{ready,go,migration}/` 전체 (SKILL.md 3 + references 28 = 31개 파일)
+  → meta_harness의 `.claude/skills/{ready,go,migration}/`에 그대로 위치.
+- 편입 안 함: 저장소 루트 README·다국어 README·CHANGELOG·marketplace 매니페스트·
+  `build/`·`ci/`·`platform/`·타 플랫폼 빌드(codex·grok·agent-plugin·antigravity).
+  meta_harness는 Claude Code 구조(.claude/skills/)만 쓰므로 Claude 빌드만 가져왔다.
+
+변경 사항 (Apache-2.0 §4 고지)
+-----------------------------
+- vendored 스킬 파일 자체는 **한 글자도 수정하지 않았다**(원문 보존 = 상류 업데이트 용이).
+- meta_harness와의 결합 규약은 스킬을 고치지 않고 **별도 파일**(`docs/dryforge-bridge.md`)과
+  코어 CLAUDE.md의 §1 라우팅 한 줄 + §8 한 절로만 구현했다. 즉 동작 조정은 전부 스킬 바깥에 있다.
+
+보안·인젝션 감사 (design-skills 선례의 "서드파티 스킬 편입 규약" 준수)
+-------------------------------------------------------------------
+- 2026-10-14 기준 커밋 v1.3.7 전수 스캔 결과:
+  * 외부 네트워크/유출 패턴(curl·wget·http·fetch·base64 -d·eval·subprocess 등): **없음**.
+  * 숨은 지시/프롬프트 오버라이드("ignore previous"·시스템 프롬프트 탈취·비밀값 전송 등): **없음**
+    ("token"·"credential" 매치는 전부 스킬 자체의 UX 지침(내부 용어 노출 금지)과
+    보안 문서 작성 품질 기준이었음 — 지시 주입 아님).
+  * 파괴적 git/fs: `git reset --hard`는 go가 **자기 생성한 `.dryforge/worktrees/`**
+    (gitignore됨) 내부에서만 사용, 워크트리 제거는 `--force` 명시 회피. 안전·의도적.
+- 결론: 편입 승인. 상류 갱신 시 이 기록의 커밋 해시를 올리고 같은 스캔을 재실행할 것.
+
+라이선스 양립성
+---------------
+- meta_harness = MIT, Dryforge = Apache-2.0. Apache-2.0 산출물을 MIT 저장소에 동봉하는 것은
+  허용되며, 동봉분(이 팩의 `skills/`)에는 Apache-2.0가 그대로 적용된다 — 그래서 LICENSE와
+  이 NOTICE와 LICENSE-APACHE-2.0을 repo 루트에 둔다. meta_harness 나머지는 계속 MIT(루트 LICENSE).

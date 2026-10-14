@@ -39,16 +39,18 @@ meta_harness 스타터킷을 실제 프로젝트 하네스로 전환한다. **�
 ## 3. 조립
 
 1. CLAUDE.md 플레이스홀더 전부 채움 (해당 없는 절은 삭제 — 빈 절 금지).
-2. **팩 선택은 조사 근거로 스스로 결정**하고 사용자에게 결과만 요약 확인: DB·사용자 데이터 발견 → db-analytics / 민감 도메인(학생·의료 등) → security-privacy / 브라우저 앱·자동 배포 → e2e-deploy / 콘텐츠 대량 생산 → content-verification / **대규모 병렬 에이전트 운용 계획이 명시적으로 있을 때만** → orchestration. 선택된 팩은 `INSTALL.md` 절차 실행, 미선택 팩은 폴더째 삭제.
-   (기본 스킬 safe-db·auth-basics·secrets-basics·deploy-check·student-privacy·risk-review·debug·tdd·verify는 팩이 아니라 **항상 유지** — 필요할 때만 로드되므로 비용이 없다. 단 학생·아동 사용자가 전혀 없는 프로젝트면 student-privacy는 삭제 가능.)
+2. **팩 선택은 조사 근거로 스스로 결정**하고 사용자에게 결과만 요약 확인: DB·사용자 데이터 발견 → db-analytics / 민감 도메인(학생·의료 등) → security-privacy / 브라우저 앱·자동 배포 → e2e-deploy / 콘텐츠 대량 생산 → content-verification. **orchestration 팩은 보통 불필요** — 코어 `go`의 wave 실행이 상위 구현이다(둘 다 넣지 말 것, `docs/dryforge-bridge.md` §7). 순수 수동 병렬만 따로 필요할 때만 orchestration. 선택된 팩은 `INSTALL.md` 절차 실행, 미선택 팩은 폴더째 삭제.
+   (기본 스킬 safe-db·auth-basics·secrets-basics·deploy-check·student-privacy·risk-review·debug·tdd·verify와 **큰 빌드 파이프라인 ready·go·migration**(CLAUDE.md §8)은 팩이 아니라 **항상 유지** — 필요할 때만 로드되므로 비용이 없다. 단 학생·아동 사용자가 전혀 없는 프로젝트면 student-privacy는 삭제 가능.)
 3. `docs/decisions-log-template.md` → `docs/decisions-log.md` 복사 후 §2 문답의 결정 기록.
-4. 킷 메타 정리: 새 프로젝트면 README를 프로젝트 소개로 교체, HARNESS.md는 docs/로 이동 또는 삭제(원본은 repo).
+4. **큰 빌드 파이프라인 delta 마커 생성 (코어 보호 — 필수)**: 프로젝트 루트에 `.dryforge/status.json`을 만들어 `{ "initialized": true }`를 넣고, `.gitignore`에 `.dryforge/` 한 줄을 추가한다. 이 마커가 있어야 ready/go가 delta 모드로 돌아 이 CLAUDE.md·docs/를 재생성하지 않는다(`docs/dryforge-bridge.md` §2).
+5. 킷 메타 정리: 새 프로젝트면 README를 프로젝트 소개로 교체, HARNESS.md는 docs/로 이동 또는 삭제(원본은 repo).
 
 ## 4. 설치 검증 (완료 선언 전)
 
 - [ ] `node scripts/check-placeholders.mjs` → 0건
 - [ ] CLAUDE.md §3 명령을 **실제 실행**해 전부 동작 (안 도는 명령을 규약에 박으면 첫 커밋부터 하네스 불신)
 - [ ] 참조 무결성: CLAUDE.md가 가리키는 파일·스킬 전부 존재 (없는 자동화를 있다고 쓰지 않기)
+- [ ] `.dryforge/status.json` = `{ "initialized": true }` 존재, `.gitignore`에 `.dryforge/` (큰 빌드 파이프라인 delta 보호)
 - [ ] 사용자에게 완성본을 **쉬운 말로 요약 보고** 후 승인 → 첫 커밋
 - [ ] 이 스킬 폴더(`.claude/skills/init-harness/`) 삭제 (일회용)
 

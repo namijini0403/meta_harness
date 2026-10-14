@@ -37,7 +37,9 @@ meta_harness/
 │   ├─ student-privacy/       ←   학생·아동 데이터 (최소 수집·동의·노출 점검)
 │   ├─ risk-review/           ←   고위험 작업 독립 검증 (blind reviewer + 예상 못 한 시험)
 │   ├─ debug/ tdd/ verify/    ←   디버깅·테스트 우선·커밋 전 게이트
-├─ docs/                      ← 템플릿: 계획서·마스터플랜·검증 루프·자동화 게이트·합리화 방지표·결정 로그
+│   ├─ ready/ go/ migration/  ←   큰 빌드 파이프라인: 의도 확정(ready)→증거 실행(go)·기존 코드 편입(migration) (외부 Dryforge 편입, Apache-2.0 — NOTICE)
+├─ docs/                      ← 템플릿: 계획서·마스터플랜·검증 루프·자동화 게이트·합리화 방지표·결정 로그 + dryforge-bridge(파이프라인 결합 규약)
+├─ NOTICE · LICENSE-APACHE-2.0 ← Dryforge 편입 귀속·감사·라이선스 (나머지 repo는 MIT)
 ├─ scripts/check-placeholders.mjs ← 설치 자가검증
 ├─ examples/EXAMPLE-CLAUDE.md ← 채움 예시
 └─ packs/                     ← 선택 모듈 (필요한 것만): content-verification · db-analytics ·
@@ -69,7 +71,7 @@ CLAUDE.md·docs/·packs/는 순수 마크다운 — 어떤 모델/도구든 따�
 ## 참고
 
 - 실전 원본: DRACONIS(math_mon) — 이 킷의 패턴이 검증된 곳. 개인용(전문가) 하네스는 별도 repo `dev-harness` 참조.
-- 흡수한 외부 설계: Dryforge(권위 분리·evidence floor·위험 비례)·Veriloop(blind review·late-bound probe) — 원리만 얇게, 세리모니는 기각.
+- 흡수한 외부 설계: Dryforge(권위 분리·evidence floor·위험 비례)·Veriloop(blind review·late-bound probe) — 코어에는 **원리를 얇게**, 그리고 Dryforge의 **실물 스킬**(ready·go·migration)을 큰 빌드 파이프라인으로 **코어 상시 포함**(`.claude/skills/`, Apache-2.0 기준 v1.3.7, 귀속 `NOTICE`). 스킬은 고치지 않고 결합 규약(`docs/dryforge-bridge.md`)으로 delta 모드·코어 보호·안전 스킬 재사용을 강제한다 — 큰 빌드에만, 작은 작업엔 쓰지 않는다.
 - 보안 스킬 연동: https://github.com/mukul975/Anthropic-Cybersecurity-Skills
 
 ## 라이선스
