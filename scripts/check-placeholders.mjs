@@ -6,7 +6,7 @@
 // 주의: docs/의 *-template.md·packs/orchestration의 템플릿 등은 "복사해 쓰는 영구 템플릿"이라
 // {{}}가 남는 게 정상 — 기본 대상에서 제외한다. 검사 대상은 "채워진 상태여야 하는 파일"
 // (CLAUDE.md, .claude/ 의 실 에이전트·스킬 정의, 팩 설치로 docs/에 복사·기입된 문서)뿐.
-import { readdirSync, readFileSync, statSync, existsSync } from 'node:fs';
+import { readdirSync, readFileSync, lstatSync, existsSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
 
 const targets = process.argv.slice(2).length ? process.argv.slice(2) : ['CLAUDE.md', '.claude'];
@@ -19,19 +19,24 @@ function scanFile(p) {
   readFileSync(p, 'utf8').split('\n').forEach((line, i) => {
     // GitHub Actions의 ${{ ... }} 구문은 플레이스홀더가 아님
     const stripped = line.replace(/\$\{\{[^}]*\}\}/g, '');
-    if (stripped.includes('{{')) hits.push(`${p.split(sep).join('/')}:${i + 1}  ${line.trim().slice(0, 80)}`);
+    if (stripped.includes('{{')) hits.push(`${p.split(sep).join('/')}:${i + 1} [본문 숨김]`);
   });
 }
 function walk(dir) {
   for (const name of readdirSync(dir)) {
     const p = join(dir, name);
-    if (statSync(p).isDirectory()) { if (!SKIP_DIRS.has(name)) walk(p); continue; }
+    const info = lstatSync(p);
+    if (info.isSymbolicLink()) { hits.push('[심볼릭 링크 검사 불가]'); continue; }
+    if (info.isDirectory()) { if (!SKIP_DIRS.has(name)) walk(p); continue; }
+    if (!info.isFile() || info.size > 1024 * 1024) { hits.push('[파일 형식/크기 검사 불가]'); continue; }
     if (EXTS.some((e) => name.endsWith(e)) && !isTemplateFile(name)) scanFile(p);
   }
 }
 for (const t of targets) {
-  if (!existsSync(t)) continue;
-  statSync(t).isDirectory() ? walk(t) : scanFile(t);
+  if (!existsSync(t)) { hits.push('[대상 없음]'); continue; }
+  const info = lstatSync(t);
+  if (info.isSymbolicLink() || (!info.isFile() && !info.isDirectory()) || (info.isFile() && info.size > 1024 * 1024)) { hits.push('[대상 검사 불가]'); continue; }
+  info.isDirectory() ? walk(t) : scanFile(t);
 }
 
 if (hits.length) {
