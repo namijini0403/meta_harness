@@ -1,0 +1,13 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.log
+*.sarif
+security-reports/
+private-data/
+student-data/
+.DS_Store
+
